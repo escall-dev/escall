@@ -141,10 +141,20 @@ html, body{
 /* Hero layout with profile */
 .hero-grid{ display:grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; gap: 28px; }
 .hero-aside{ display:flex; justify-content: center; align-self: start; }
-.profile-img{ width: 300px; height: 300px; max-width: 38vw; aspect-ratio: 1 / 1; border-radius: 999px; object-fit: cover; border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 6px rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); transform: translateY(-16px); }
+.profile-img{ 
+	width: min(300px, 38vw); 
+	height: min(300px, 38vw); 
+	aspect-ratio: 1 / 1; 
+	border-radius: 50%; 
+	object-fit: cover; 
+	border: 2px solid rgba(255,255,255,0.12); 
+	box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 6px rgba(255,255,255,0.04); 
+	background: rgba(255,255,255,0.02); 
+	transform: translateY(-16px); 
+}
 @media (max-width: 880px){ .hero-grid{ grid-template-columns: 1fr; } .hero-aside{ order: -1; margin-bottom: 12px; align-self: center; } .profile-img{ transform: none; } }
-@media (max-width: 640px){ .profile-img{ width: 200px; height: 200px; } }
-@media (max-width: 420px){ .profile-img{ width: 160px; height: 160px; } }
+@media (max-width: 640px){ .profile-img{ width: min(200px, 42vw); height: min(200px, 42vw); } }
+@media (max-width: 420px){ .profile-img{ width: min(160px, 45vw); height: min(160px, 45vw); } }
 
 /* Two rows of four (first 8 items) */
 .tech-grid--2x4{ grid-template-columns: repeat(4, minmax(0,1fr)); }
