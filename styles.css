@@ -132,11 +132,14 @@ html, body{
 }
 
 /* Minimal tech grid */
-.tech-grid{ list-style:none; padding:0; margin:0; display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.tech-grid{ list-style:none; padding:0; margin:0; display:grid; gap: 10px; }
 .tech-item{ display:flex; flex-direction: column; align-items:center; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; }
 .tech-item:hover{ border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
 .tech-icon-img{ width: 22px; height: 22px; display:block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
 .tech-label{ font-size: 11px; color: var(--muted); }
+
+/* Utility classes */
+.mt{ margin-top: 48px; }
 
 /* Hero layout with profile */
 .hero-grid{ display:grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; gap: 28px; }
@@ -156,8 +159,15 @@ html, body{
 @media (max-width: 640px){ .profile-img{ width: min(200px, 42vw); height: min(200px, 42vw); } }
 @media (max-width: 420px){ .profile-img{ width: min(160px, 45vw); height: min(160px, 45vw); } }
 
-/* Two rows of four (first 8 items) */
-.tech-grid--2x4{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-@media (max-width: 720px){ .tech-grid--2x4{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+/* Three rows of four (12 items) */
+.tech-grid--3x4{ 
+	grid-template-columns: repeat(4, minmax(0,1fr)) !important; 
+}
+@media (max-width: 800px){ 
+	.tech-grid--3x4{ grid-template-columns: repeat(3, minmax(0,1fr)) !important; } 
+}
+@media (max-width: 600px){ 
+	.tech-grid--3x4{ grid-template-columns: repeat(2, minmax(0,1fr)) !important; } 
+}
 
 
