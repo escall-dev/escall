@@ -64,6 +64,7 @@
     window.addEventListener('keydown', handleFirstTab);
   }
   window.addEventListener('keydown', handleFirstTab);
+})();
 
 (function(){
 	const navLinks = Array.from(document.querySelectorAll('.bottom-nav .nav-item'));
@@ -91,11 +92,109 @@
 			const target = document.getElementById(targetId);
 			if(!target) return;
 			e.preventDefault();
-			const rect = target.getBoundingClientRect();
-			const offset = window.scrollY + rect.top - 8; // small headroom
-			window.scrollTo({ top: offset, behavior: 'smooth' });
+			
+			// Special handling for home section - scroll to top
+			if(targetId === 'home') {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			} else {
+				const rect = target.getBoundingClientRect();
+				const offset = window.scrollY + rect.top - 8; // small headroom
+				window.scrollTo({ top: offset, behavior: 'smooth' });
+			}
 		});
 	});
 })();
 
+// Name Typewriter Effect
+document.addEventListener('DOMContentLoaded', function() {
+	const nameElement = document.getElementById('typewriter-name');
+	if (nameElement) {
+		console.log('Name typewriter element found');
+		
+		// Clear any existing content
+		nameElement.textContent = '';
+		
+		const nameText = 'Alexander Joerenz Escallente';
+		let nameCharIndex = 0;
+
+		function typewriterName() {
+			if (nameCharIndex < nameText.length) {
+				nameElement.textContent = nameText.substring(0, nameCharIndex + 1);
+				nameCharIndex++;
+				setTimeout(typewriterName, 100);
+			} else {
+				console.log('Name typing completed');
+			}
+		}
+
+		// Start name typing immediately
+		console.log('Starting name typewriter in 500ms');
+		setTimeout(typewriterName, 500);
+	} else {
+		console.log('Name typewriter element not found');
+	}
+});
+
+// Hero Typewriter Effect
+document.addEventListener('DOMContentLoaded', function() {
+	const typewriterElement = document.getElementById('typewriter');
+	if (!typewriterElement) {
+		console.log('Typewriter element not found');
+		return;
+	}
+	
+	console.log('Typewriter element found, starting animation');
+	
+	// Clear initial text
+	typewriterElement.textContent = '';
+
+	const texts = [
+		'Building seamless web experiences',
+    'Developing end-to-end digital solutions',
+    'Crafting scalable and efficient systems',
+    'Creating intuitive user interfaces',
+    'Optimizing performance and user experience',
+    'Building clean, scalable, delightful software',
+		'Full-Stack Developer',
+		'Software Developer',
+	];
+
+	let currentTextIndex = 0;
+	let currentCharIndex = 0;
+	let isDeleting = false;
+
+	function typeWriter() {
+		const currentText = texts[currentTextIndex];
+		
+		if (!isDeleting) {
+			// Typing
+			if (currentCharIndex < currentText.length) {
+				typewriterElement.textContent = currentText.substring(0, currentCharIndex + 1);
+				currentCharIndex++;
+				setTimeout(typeWriter, 100);
+			} else {
+				// Finished typing, pause then start deleting
+				setTimeout(() => {
+					isDeleting = true;
+					typeWriter();
+				}, 2000);
+			}
+		} else {
+			// Deleting
+			if (currentCharIndex > 0) {
+				typewriterElement.textContent = currentText.substring(0, currentCharIndex - 1);
+				currentCharIndex--;
+				setTimeout(typeWriter, 50);
+			} else {
+				// Finished deleting, move to next text
+				isDeleting = false;
+				currentTextIndex = (currentTextIndex + 1) % texts.length;
+				setTimeout(typeWriter, 500);
+			}
+		}
+	}
+
+	// Start the hero typewriter effect after name is done
+	setTimeout(typeWriter, 3000); // Delay to let name finish first
+});
 

@@ -10,9 +10,35 @@
 		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
+		<!-- SVG Gradients for Social Icons -->
+		<svg width="0" height="0" style="position: absolute;">
+			<defs>
+				<!-- Gmail Colors Gradient -->
+				<radialGradient id="googleGradient" cx="50%" cy="50%" r="50%">
+					<stop offset="0%" style="stop-color:#EA4335;stop-opacity:1" />
+					<stop offset="25%" style="stop-color:#FBBC05;stop-opacity:1" />
+					<stop offset="50%" style="stop-color:#34A853;stop-opacity:1" />
+					<stop offset="75%" style="stop-color:#4285F4;stop-opacity:1" />
+					<stop offset="100%" style="stop-color:#EA4335;stop-opacity:1" />
+				</radialGradient>
+				
+				<!-- Instagram Gradient -->
+				<linearGradient id="instagramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" style="stop-color:#833AB4;stop-opacity:1" />
+					<stop offset="25%" style="stop-color:#C13584;stop-opacity:1" />
+					<stop offset="50%" style="stop-color:#E1306C;stop-opacity:1" />
+					<stop offset="75%" style="stop-color:#FD1D1D;stop-opacity:1" />
+					<stop offset="100%" style="stop-color:#F56040;stop-opacity:1" />
+				</linearGradient>
+			</defs>
+		</svg>
+		
 		<header class="site-header">
 			<div class="container">
-				<h1 class="name">Alexander Joerenz Escallente</h1>
+				<h1 class="name">
+					<span class="typewriter-name" id="typewriter-name"></span>
+					<span class="typewriter-cursor-name"></span>
+				</h1>
 				<p class="tagline">Full‑Stack Developer • Building clean, scalable, delightful software</p>
 				<div class="socials">
 					<a href="https://github.com/escall-dev" aria-label="GitHub" class="social social--github" target="_blank" rel="noopener noreferrer">
@@ -22,7 +48,16 @@
 						<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
 					</a>
 					<a href="https://mail.google.com/mail/?view=cm&fs=1&to=joerenzescallente027@gmail.com" aria-label="Gmail" class="social social--gmail" target="_blank" rel="noopener noreferrer">
-						<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.887.492-1.667 1.205-2.064L1.636 3.273h3.819L12 8.183l6.545-4.91h3.819l.431.12c.713.397 1.205 1.177 1.205 2.064z"/></svg>
+						<svg class="social-icon" viewBox="0 0 141.7 141.7" aria-hidden="true">
+							<path fill="#4285f4" d="M24.3,111.3h17.2V69.6L16.9,51.3V104C16.9,108,20.2,111.3,24.3,111.3z"></path>
+							<path fill="#34a853" d="M100.3,111.3h17.2c4.1,0,7.4-3.3,7.4-7.4V51.3l-24.5,18.4V111.3z"></path>
+							<path fill="#fbbc04" d="M100.3,37.8v31.9l24.5-18.4v-9.8c0-9.1-10.4-14.3-17.7-8.8L100.3,37.8z"></path>
+							<path fill="#ea4335" fill-rule="evenodd" d="M41.4,69.6V37.8l29.4,22.1l29.4-22.1v31.9L70.9,91.7L41.4,69.6z" clip-rule="evenodd"></path>
+							<path fill="#c5221f" d="M16.9,41.4v9.8l24.5,18.4V37.8l-6.9-5.2C27.3,27.2,16.9,32.4,16.9,41.4z"></path>
+						</svg>
+					</a>
+					<a href="https://www.instagram.com/_joerenz/" aria-label="Instagram" class="social social--instagram" target="_blank" rel="noopener noreferrer">
+						<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
 					</a>
 				</div>
 			</div>
@@ -33,8 +68,11 @@
 				<div class="container">
 					<div class="hero-grid">
 						<div class="hero-copy">
-							<h2 class="hero-title">Crafting reliable backends and elegant frontends</h2>
-							<p class="hero-subtitle">I design, build, and ship end‑to‑end web experiences with performance and DX in mind.</p>
+							<h2 class="hero-title">
+								<span class="typewriter-text" id="typewriter">Alexander Joerenz Escallente</span>
+								<span class="typewriter-cursor"></span>
+							</h2>
+							
 							<div class="cta-group">
 								<a href="#projects" class="btn btn-primary">See Projects</a>
 						<a href="https://mail.google.com/mail/?view=cm&fs=1&to=joerenzescallente027@gmail.com" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Get In Touch</a>
@@ -49,48 +87,77 @@
 
 			<section id="about" class="section">
 				<div class="container">
-					<h3>Tech Stack</h3>
-					<ul class="tech-grid tech-grid--3x4">
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5 logo" width="28" height="28"><span class="tech-label">HTML</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://api.iconify.design/simple-icons:css3.svg?color=%231572B6" alt="CSS3 logo" width="28" height="28" onerror="this.onerror=null; this.src='https://cdn.simpleicons.org/css3/1572B6';"><span class="tech-label">CSS</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript logo" width="28" height="28"><span class="tech-label">JavaScript</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/react/61DAFB" alt="React logo" width="28" height="28"><span class="tech-label">React</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/git/F05032" alt="Git logo" width="28" height="28"><span class="tech-label">Git</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/github/FFFFFF" alt="GitHub logo" width="28" height="28"><span class="tech-label">GitHub</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/php/777BB4" alt="PHP logo" width="28" height="28"><span class="tech-label">PHP</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL logo" width="28" height="28"><span class="tech-label">MySQL</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/vercel/FFFFFF" alt="Vercel logo" width="28" height="28"><span class="tech-label">Vercel</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/xampp/F37623" alt="XAMPP logo" width="28" height="28"><span class="tech-label">XAMPP</span></li>
-						<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/python/3776AB" alt="Python logo" width="28" height="28"><span class="tech-label">Python</span></li>
-						<li class="tech-item"><svg class="tech-icon-img" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Windows logo"><path d="M0 3.449L9.75 2.1v9.451H0zm10.949-1.383L24 0v11.4H10.949zM0 12.6h9.75v9.451L0 20.699zm10.949.45H24V24l-13.051-1.949z" fill="#0078D4"/></svg><span class="tech-label">Windows</span></li>
-					</ul>
+					<div class="about-grid">
+						<div class="tech-section">
+							<h3>My Tech Stack</h3>
+							<ul class="tech-grid tech-grid--circular">
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" title="HTML5"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://api.iconify.design/simple-icons:css3.svg?color=%231572B6" alt="CSS3" title="CSS3" onerror="this.onerror=null; this.src='https://cdn.simpleicons.org/css3/1572B6';"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" title="JavaScript"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/react/61DAFB" alt="React" title="React"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/git/F05032" alt="Git" title="Git"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/github/FFFFFF" alt="GitHub" title="GitHub"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" title="PHP"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" title="MySQL"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/vercel/FFFFFF" alt="Vercel" title="Vercel"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/xampp/F37623" alt="XAMPP" title="XAMPP"></li>
+								<li class="tech-item"><img class="tech-icon-img" src="https://cdn.simpleicons.org/python/3776AB" alt="Python" title="Python"></li>
+								<li class="tech-item"><svg class="tech-icon-img" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Windows" title="Windows"><path d="M0 3.449L9.75 2.1v9.451H0zm10.949-1.383L24 0v11.4H10.949zM0 12.6h9.75v9.451L0 20.699zm10.949.45H24V24l-13.051-1.949z" fill="#0078D4"/></svg></li>
+							</ul>
+							
+							<div class="quick-stats">
+								<h4>Quick Stats</h4>
+								<div class="stats-grid">
+									<div class="stat-item">
+										<div class="stat-number">10+</div>
+										<div class="stat-label">Projects Completed</div>
+									</div>
+									<div class="stat-item">
+										<div class="stat-number">50K+</div>
+										<div class="stat-label">Lines of Code</div>
+									</div>
+									<div class="stat-item">
+										<div class="stat-number">3+</div>
+										<div class="stat-label">Years Coding</div>
+									</div>
+									<div class="stat-item">
+										<div class="stat-number">∞</div>
+										<div class="stat-label">Coffee Consumed</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
 
-					<h3 class="mt">Selected Projects</h3>
-					<div class="projects">
-						<article class="card">
-							<h4>Tardiness Monitoring System</h4>
-							<p>A system that monitors and records tardiness of students in a school.</p>
-							<div class="card-actions">
-							<a class="chip" href="https://comsite-tms.vercel.app/" target="_blank" rel="noopener noreferrer">Demo</a>
-							<a class="chip" href="https://github.com/escall-dev/Comsite-tardiness-monitoring-system" target="_blank" rel="noopener noreferrer">Code</a>
+						<div class="projects-section">
+							<h3>Selected Projects</h3>
+							<div class="projects">
+								<article class="card">
+									<h4>Tardiness Monitoring System</h4>
+									<p>A system that monitors and records tardiness of students in a school.</p>
+									<div class="card-actions">
+									<a class="chip" href="https://comsite-tms.vercel.app/" target="_blank" rel="noopener noreferrer">Demo</a>
+									<a class="chip" href="https://github.com/escall-dev/Comsite-tardiness-monitoring-system" target="_blank" rel="noopener noreferrer">Code</a>
+									</div>
+								</article>
+								<article class="card">
+									<h4>Qr Code Digital Attendance Tracking System</h4>
+									<p>A system that tracks the attendance of students using QR codes.</p>
+									<div class="card-actions">
+									<a class="chip" href="https://github.com/escall-dev/Qnnect/blob/main/README.md" target="_blank" rel="noopener noreferrer">Docs</a>
+									<a class="chip" href="https://github.com/escall-dev/Qnnect" target="_blank" rel="noopener noreferrer">Code</a>
+									</div>
+								</article>
+								<article class="card">
+									<h4>8-Charity project and funds system</h4>
+									<p>A system that manages Grade 8- Charity projects and tracks funds.</p>
+									<div class="card-actions">
+									<a class="chip" href="https://github.com/escall-dev/8-charifund/blob/main/README.md" target="_blank" rel="noopener noreferrer">Docs</a>
+									<a class="chip" href="https://github.com/escall-dev/8-charifund" target="_blank" rel="noopener noreferrer">Code</a>
+									</div>
+								</article>
 							</div>
-						</article>
-						<article class="card">
-							<h4>Qr Code Digital Attendance Tracking System</h4>
-							<p>A system that tracks the attendance of students using QR codes.</p>
-							<div class="card-actions">
-							<a class="chip" href="https://github.com/escall-dev/Qnnect/blob/main/README.md" target="_blank" rel="noopener noreferrer">Docs</a>
-							<a class="chip" href="https://github.com/escall-dev/Qnnect" target="_blank" rel="noopener noreferrer">Code</a>
-							</div>
-						</article>
-						<article class="card">
-							<h4>8-Charity project and funds system</h4>
-							<p>A system that manages Grade 8- Charity projects and tracks funds.</p>
-							<div class="card-actions">
-							<a class="chip" href="https://github.com/escall-dev/8-charifund/blob/main/README.md" target="_blank" rel="noopener noreferrer">Docs</a>
-							<a class="chip" href="https://github.com/escall-dev/8-charifund" target="_blank" rel="noopener noreferrer">Code</a>
-							</div>
-						</article>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -112,6 +179,16 @@
 				<span class="label">Projects</span>
 			</a>
 		</nav>
+
+		<footer class="site-footer">
+			<div class="container">
+				<p class="footer-text">© 2025 Alexander Joerenz Escallente. Built with passion and code.</p>
+			</div>
+		</footer>
+
+		<link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css">
+<script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
+
 
 		<script src="script.js"></script>
 	</body>

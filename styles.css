@@ -46,14 +46,46 @@ html, body{
 }
 
 .socials{ display:flex; gap: 12px; flex-wrap: wrap; }
-.social{ display:inline-flex; align-items:center; justify-content:center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); text-decoration: none; color: var(--text); }
-.social-icon{ width: 20px; height: 20px; display:block; fill: currentColor; }
+.social{ 
+	display: inline-flex; 
+	align-items: center; 
+	justify-content: center; 
+	width: auto; 
+	height: auto; 
+	border-radius: 0; 
+	border: none; 
+	background: transparent; 
+	text-decoration: none; 
+	color: var(--text); 
+	padding: 8px;
+	transition: all 0.3s ease;
+}
+.social-icon{ 
+	width: 28px; 
+	height: 28px; 
+	display: block; 
+	fill: currentColor; 
+	filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); 
+	transition: all 0.3s ease;
+	object-fit: contain;
+}
 .social--github{ color: #ffffff; }
-.social--linkedin{ color: #0A66C2; }
-.social--email{ color: #22d3ee; }
-.social:hover{ border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.04); filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3)); }
+.social--facebook{ color: #1877F2; }
+.social--gmail .social-icon{ 
+	/* Uses built-in official Gmail colors */ 
+}
+.social--instagram .social-icon{ 
+	fill: url(#instagramGradient); 
+}
+.social:hover{ 
+	transform: translateY(-3px) scale(1.1); 
+	filter: brightness(1.2); 
+}
+.social:hover .social-icon{ 
+	filter: drop-shadow(0 6px 16px rgba(0,0,0,0.8)); 
+}
 
-.section{ padding: 72px 0; min-height: 75svh; }
+
 .section--hero{ padding-top: 32px; padding-bottom: 48px; min-height: 66svh; }
 
 .hero-title{ font-size: clamp(22px, 4vw, 32px); margin: 0 0 8px 0; }
@@ -75,10 +107,22 @@ html, body{
 @media (max-width: 1000px){ .projects{ grid-template-columns: repeat(2, 1fr);} }
 @media (max-width: 640px){ .projects{ grid-template-columns: 1fr;} }
 
-.card{ background: rgba(13,17,23,0.66); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
-.card h4{ margin: 0 0 6px 0; }
-.card p{ margin: 0 0 12px 0; color: var(--muted); }
-.card-actions{ display:flex; gap: 8px; }
+.card{ 
+	background: rgba(13,17,23,0.66); 
+	border: 1px solid var(--border); 
+	border-radius: 14px; 
+	padding: 20px; 
+	box-shadow: var(--shadow); 
+	aspect-ratio: 1 / 1; 
+	display: flex; 
+	flex-direction: column; 
+	justify-content: space-between; 
+	min-height: 250px; 
+	max-width: 280px;
+}
+.card h4{ margin: 0 0 8px 0; font-size: 16px; line-height: 1.3; }
+.card p{ margin: 0 0 auto 0; color: var(--muted); font-size: 14px; line-height: 1.4; flex-grow: 1; }
+.card-actions{ display:flex; gap: 8px; margin-top: 16px; justify-content: center; }
 .chip{ display:inline-block; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: rgba(255,255,255,0.02); }
 
 .contact-form{ display:grid; gap: 12px; }
@@ -138,6 +182,211 @@ html, body{
 .tech-icon-img{ width: 22px; height: 22px; display:block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
 .tech-label{ font-size: 11px; color: var(--muted); }
 
+/* Transparent tech grid - 3x4 layout */
+.tech-grid--circular{ 
+	display: grid; 
+	grid-template-columns: repeat(4, 1fr); 
+	grid-template-rows: repeat(3, 1fr); 
+	gap: 24px; 
+	max-width: 480px; 
+	margin: 0 auto; 
+	justify-items: center; 
+	align-items: center;
+}
+.tech-grid--circular .tech-item{ 
+	width: auto; 
+	height: auto; 
+	border-radius: 0; 
+	padding: 12px; 
+	display: flex; 
+	align-items: center; 
+	justify-content: center; 
+	background: transparent; 
+	border: none; 
+	transition: all 0.3s ease; 
+	position: relative; 
+}
+.tech-grid--circular .tech-item:hover{ 
+	transform: translateY(-3px) scale(1.1); 
+	filter: brightness(1.2); 
+}
+.tech-grid--circular .tech-icon-img{ 
+	width: 40px; 
+	height: 40px; 
+	filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); 
+	transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for transparent tech grid */
+@media (max-width: 640px) {
+	.tech-grid--circular { 
+		grid-template-columns: repeat(3, 1fr); 
+		grid-template-rows: repeat(4, 1fr); 
+		gap: 20px; 
+		max-width: 100%; 
+	}
+	.tech-grid--circular .tech-item { padding: 8px; }
+	.tech-grid--circular .tech-icon-img { width: 36px; height: 36px; }
+}
+
+@media (max-width: 480px) {
+	.tech-grid--circular { 
+		grid-template-columns: repeat(2, 1fr); 
+		grid-template-rows: repeat(6, 1fr); 
+		gap: 16px; 
+	}
+	.tech-grid--circular .tech-item { padding: 6px; }
+	.tech-grid--circular .tech-icon-img { width: 32px; height: 32px; }
+}
+
+/* About section side-by-side layout */
+.about-grid {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 48px;
+	align-items: start;
+}
+
+.tech-section {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.tech-section h3 {
+	margin-bottom: 24px;
+	align-self: center;
+	text-align: center;
+	width: 100%;
+}
+
+.projects-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.projects-section h3 {
+	margin-bottom: 24px;
+	text-align: center;
+}
+
+/* Adjust tech grid for left alignment */
+.tech-section .tech-grid--circular {
+	justify-content: flex-start;
+	max-width: 100%;
+	margin: 0;
+}
+
+/* Quick Stats Section */
+.quick-stats {
+	margin-top: 32px;
+}
+
+.quick-stats h4 {
+	margin: 0 0 20px 0;
+	font-size: 18px;
+	color: var(--text);
+	text-align: center;
+}
+
+.stats-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+	max-width: 280px;
+}
+
+.stat-item {
+	background: rgba(255,255,255,0.04);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 16px 12px;
+	text-align: center;
+	transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+	border-color: rgba(255,255,255,0.16);
+	background: rgba(255,255,255,0.08);
+	transform: translateY(-2px);
+}
+
+.stat-number {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--accent);
+	margin-bottom: 4px;
+	line-height: 1;
+}
+
+.stat-label {
+	font-size: 11px;
+	color: var(--muted);
+	line-height: 1.3;
+}
+
+/* Adjust projects grid for side-by-side layout - 2x2 grid */
+.projects-section .projects {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px;
+	justify-items: center;
+	max-width: 600px;
+}
+
+/* Center the third project card in the bottom row */
+.projects-section .projects .card:nth-child(3) {
+	grid-column: 1 / -1;
+	justify-self: center;
+}
+
+/* Responsive adjustments for side-by-side layout */
+@media (max-width: 900px) {
+	.about-grid {
+		grid-template-columns: 1fr;
+		gap: 32px;
+	}
+	
+	.tech-section .tech-grid--circular {
+		justify-content: center;
+	}
+	
+	/* Center quick stats on tablet */
+	.quick-stats .stats-grid {
+		margin: 0 auto;
+	}
+	
+	/* Maintain 2x2 grid on tablet */
+	.projects-section .projects {
+		max-width: 100%;
+		margin: 0 auto;
+	}
+	
+	.projects-section .projects .card:nth-child(3) {
+		grid-column: 1 / -1;
+		justify-self: center;
+	}
+}
+
+@media (max-width: 640px) {
+	/* Single column on mobile */
+	.projects-section .projects {
+		grid-template-columns: 1fr;
+		max-width: 300px;
+		margin: 0 auto;
+	}
+	
+	.projects-section .projects .card:nth-child(3) {
+		grid-column: 1;
+		justify-self: center;
+	}
+	
+	.card {
+		max-width: 100%;
+		width: 100%;
+	}
+}
+
 /* Utility classes */
 .mt{ margin-top: 48px; }
 
@@ -168,6 +417,216 @@ html, body{
 }
 @media (max-width: 600px){ 
 	.tech-grid--3x4{ grid-template-columns: repeat(2, minmax(0,1fr)) !important; } 
+}
+
+/* Typewriter Effect */
+.hero-title {
+	position: relative;
+	min-height: 1.2em;
+	text-align: left;
+}
+
+.typewriter-text {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	border-right: transparent;
+	font-weight: 600;
+	color: var(--text);
+	caret-color: transparent;
+	user-select: none;
+}
+
+.typewriter-cursor {
+	display: inline-block;
+	background: var(--text);
+	width: 2px;
+	height: 1.5em;
+	margin-left: 2px;
+	animation: blink 1.2s infinite;
+	opacity: 1;
+	vertical-align: baseline;
+}
+
+/* Name typewriter cursor */
+.typewriter-cursor-name {
+	display: inline-block;
+	background: var(--text);
+	width: 2px;
+	height: 1.2em;
+	margin-left: 2px;
+	animation: blink 1.2s infinite;
+	opacity: 1;
+	vertical-align: baseline;
+}
+
+.typewriter-name {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	border-right: transparent;
+	font-weight: inherit;
+	color: var(--text);
+	caret-color: transparent;
+	user-select: none;
+	min-height: 1.2em; /* Maintain height even when empty */
+}
+
+@keyframes blink {
+	0%, 50% { opacity: 1; }
+	51%, 100% { opacity: 0; }
+}
+
+@keyframes typing {
+	from { width: 0; }
+	to { width: 100%; }
+}
+
+@keyframes erasing {
+	from { width: 100%; }
+	to { width: 0; }
+}
+
+/* Smooth transitions for typewriter */
+.typewriter-text.typing {
+	animation: typing 2s steps(40, end) forwards;
+	width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.typewriter-text.erasing {
+	animation: erasing 1s steps(40, end) forwards;
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.typewriter-text.paused {
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/* GitHub Calendar Styles */
+.github-calendar-wrapper {
+	display: flex;
+	justify-content: center;
+	margin: 24px 0;
+}
+
+.github-calendar-link {
+	text-decoration: none;
+	display: block;
+	border-radius: 16px;
+	padding: 20px;
+	background: rgba(13,17,23,0.6);
+	border: 1px solid var(--border);
+	box-shadow: var(--shadow);
+	transition: all 0.3s ease;
+	backdrop-filter: blur(8px);
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.github-calendar-link:hover {
+	border-color: rgba(255,255,255,0.18);
+	background: rgba(13,17,23,0.8);
+	box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+	transform: translateY(-2px);
+}
+
+.github-calendar {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+	width: 100%;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+/* Override default GitHub calendar styles to match dark theme */
+.github-calendar .js-calendar-graph .ContributionCalendar-day[data-level="0"] {
+	fill: rgba(255,255,255,0.06);
+}
+
+.github-calendar .js-calendar-graph .ContributionCalendar-day[data-level="1"] {
+	fill: rgba(124,158,255,0.3);
+}
+
+.github-calendar .js-calendar-graph .ContributionCalendar-day[data-level="2"] {
+	fill: rgba(124,158,255,0.5);
+}
+
+.github-calendar .js-calendar-graph .ContributionCalendar-day[data-level="3"] {
+	fill: rgba(124,158,255,0.7);
+}
+
+.github-calendar .js-calendar-graph .ContributionCalendar-day[data-level="4"] {
+	fill: rgba(124,158,255,0.9);
+}
+
+.github-calendar .js-calendar-graph-svg {
+	max-width: 100%;
+	height: auto;
+}
+
+.github-calendar .contrib-legend {
+	font-size: 11px;
+}
+
+.github-calendar .contrib-legend .legend {
+	color: var(--muted);
+}
+
+.github-calendar .contrib-number {
+	color: var(--text);
+	font-weight: 600;
+}
+
+.github-calendar .contrib-footer {
+	color: var(--muted);
+	font-size: 12px;
+	margin-top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+	.github-calendar-link {
+		padding: 16px;
+		margin: 0 -16px;
+		border-radius: 12px;
+	}
+	
+	.github-calendar {
+		font-size: 11px;
+	}
+}
+
+@media (max-width: 600px) {
+	.github-calendar-link {
+		padding: 12px;
+		margin: 0 -12px;
+	}
+	
+	.github-calendar .js-calendar-graph .ContributionCalendar-day {
+		rx: 1;
+		ry: 1;
+	}
+}
+
+/* Footer */
+.site-footer {
+	padding: 24px 0 120px; /* Extra bottom padding to account for fixed bottom nav */
+	margin-top: 15px;
+	border-top: 1px solid var(--border);
+	background: rgba(255,255,255,0.02);
+}
+
+.footer-text {
+	margin: 0;
+	text-align: center;
+	color: var(--muted);
+	font-size: 14px;
+	opacity: 0.8;
 }
 
 
