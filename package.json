@@ -1,0 +1,23 @@
+{
+  "name": "escall.me",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escall-dev/escall.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/escall-dev/escall/issues"
+  },
+  "homepage": "https://github.com/escall-dev/escall#readme",
+  "description": "",
+  "dependencies": {
+    "@vercel/speed-insights": "^1.2.0"
+  }
+}
