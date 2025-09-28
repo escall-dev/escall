@@ -149,14 +149,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	typewriterElement.textContent = '';
 
 	const texts = [
-		'Building seamless web experiences',
+	'Full-Stack Developer',
+	'Software Developer',
+	'Building seamless web experiences',
     'Developing end-to-end digital solutions',
     'Crafting scalable and efficient systems',
     'Creating intuitive user interfaces',
-    'Optimizing performance and user experience',
-    'Building clean, scalable, delightful software',
-		'Full-Stack Developer',
-		'Software Developer',
+   
 	];
 
 	let currentTextIndex = 0;
@@ -197,4 +196,467 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Start the hero typewriter effect after name is done
 	setTimeout(typeWriter, 3000); // Delay to let name finish first
 });
+
+// Image Modal Functions
+function openImageModal(imageSrc, caption) {
+	const modal = document.getElementById('imageModal');
+	const modalImg = document.getElementById('modalImage');
+	const modalCaption = document.getElementById('modalCaption');
+	
+	modalImg.src = imageSrc;
+	modalCaption.textContent = caption;
+	modal.style.display = 'block';
+	modal.classList.add('show');
+	
+	// Prevent body scroll when modal is open
+	document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+	const modal = document.getElementById('imageModal');
+	modal.classList.remove('show');
+	
+	// Restore body scroll
+	document.body.style.overflow = 'auto';
+	
+	// Hide modal after animation
+	setTimeout(() => {
+		modal.style.display = 'none';
+	}, 300);
+}
+
+// Close modal when clicking outside the image
+document.addEventListener('click', function(event) {
+	const modal = document.getElementById('imageModal');
+	if (event.target === modal) {
+		closeImageModal();
+	}
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+	if (event.key === 'Escape') {
+		closeImageModal();
+		closeProjectModal();
+	}
+});
+
+// Projects Carousel Functionality - True Infinite Loop
+let currentSlide = 0;
+const totalSlides = 5;
+const slideWidth = 340; // 300px slide + 40px gap
+let visibleSlides = 3; // Number of slides visible at once
+
+// Project templates for infinite generation
+const projectTemplates = [
+	{
+		img: "imgs/tms.png",
+		alt: "Tardiness Monitoring System",
+		title: "Tardiness Monitoring System",
+		modalIndex: 0
+	},
+	{
+		img: "imgs/Qnnect-v1.3.6.png",
+		alt: "Qnnect",
+		title: "Qnnect",
+		modalIndex: 1
+	},
+	{
+		img: "imgs/Charifund.png",
+		alt: "ChariFund",
+		title: "ChariFund",
+		modalIndex: 2
+	},
+	{
+		img: "imgs/lms.png",
+		alt: "Logbook Monitoring System",
+		title: "Logbook Monitoring System",
+		modalIndex: 3
+	},
+	{
+		img: "imgs/camp_of_coffee POS.png",
+		alt: "Camp of Coffee POS",
+		title: "Camp of Coffee POS",
+		modalIndex: 4
+	}
+];
+
+// Project data for modal
+const projectsData = [
+	{
+		title: "Tardiness Monitoring System",
+		image: "imgs/tms.png",
+		description: "A Late Monitoring System Deployed for Computer Site Institute Incorporated. It is a comprehensive system that monitors and records student tardiness in educational institutions. Features real-time tracking, reporting, and administrative controls.",
+		tech: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
+		actions: [
+			{ text: "Live Demo", href: "https://comsite-tms.vercel.app/", type: "primary" },
+			{ text: "View Code", href: "https://github.com/escall-dev/Comsite-tardiness-monitoring-system", type: "ghost" }
+		]
+	},
+	{
+		title: "Qnnect",
+		image: "imgs/Qnnect-v1.3.6.png",
+		description: "A QR Code Digital Attendance Tracking System that uses QR codes for efficient student tracking. Features real-time attendance monitoring.",
+		tech: ["PHP", "JavaScript", "MySQL", "API", "Bootstrap", "jQuery", "AJAX", "JSON", "XAMPP", "Apache", "Windows"],
+		actions: [
+			{ text: "Documentation", href: "https://github.com/escall-dev/Qnnect/blob/main/README.md", type: "primary" },
+			{ text: "View Code", href: "https://github.com/escall-dev/Qnnect", type: "ghost" }
+		]
+	},
+	{
+		title: "ChariFund",
+		image: "imgs/Charifund.png",
+		description: "A 8-Charity Project and Funds System that manages Grade 8 charity projects and tracks funds. Includes donation tracking, project management, and financial reporting.",
+		tech: ["HTML", "CSS", "JavaScript"],
+		actions: [
+			{ text: "Documentation", href: "https://github.com/escall-dev/8-charifund/blob/main/README.md", type: "primary" },
+			{ text: "View Code", href: "https://github.com/escall-dev/8-charifund", type: "ghost" }
+		]
+	},
+	{
+		title: "Logbook Monitoring System",
+		image: "imgs/lms.png",
+		description: "A comprehensive system for monitoring and managing logbooks in educational or professional settings. Features digital logbook tracking, entry validation, and administrative oversight.",
+		tech: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
+		actions: [
+			{ text: "Documentation", href: "https://github.com/escall-dev/logbook-monitoring-system", type: "primary" },
+			{ text: "View Code", href: "https://github.com/escall-dev/logbook-monitoring-system", type: "ghost" }
+		]
+	},
+	{
+		title: "Camp of Coffee POS",
+		image: "imgs/camp_of_coffee POS.png",
+		description: "A comprehensive Point of Sale (POS) and inventory management system designed for coffee shops. Features sales tracking, stock management, customer management, and detailed reporting for business operations.",
+		tech: ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "Bootstrap", "jQuery"],
+		actions: [
+			{ text: "Documentation", href: "https://github.com/escall-dev/camp-of-coffee/blob/main/README.md", type: "primary" },
+			{ text: "View Code", href: "https://github.com/escall-dev/camp-of-coffee", type: "ghost" }
+		]
+	}
+];
+
+// Initialize carousel
+document.addEventListener('DOMContentLoaded', function() {
+	// Initialize infinite carousel system
+	initializeInfiniteCarousel();
+	createCarouselDots();
+	
+	// Set up smooth transitions
+	const track = document.getElementById('carouselTrack');
+	track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+	
+	// Initial update
+	updateInfiniteCarousel();
+	initSwipeHandlers();
+
+	// Projects title typewriter (looping)
+	const projTitle = document.getElementById('projects-typewriter');
+	if (projTitle) {
+		projTitle.textContent = '';
+		
+		const projTexts = [
+			'My Projects',
+			'Work Showcase',
+			'Featured Work',
+			'Recent Projects'
+		];
+		
+		let projCurrentTextIndex = 0;
+		let projCurrentCharIndex = 0;
+		let projIsDeleting = false;
+		
+		function projTypeWriter() {
+			const currentText = projTexts[projCurrentTextIndex];
+			
+			if (!projIsDeleting) {
+				// Typing
+				if (projCurrentCharIndex < currentText.length) {
+					projTitle.textContent = currentText.substring(0, projCurrentCharIndex + 1);
+					projCurrentCharIndex++;
+					setTimeout(projTypeWriter, 100);
+				} else {
+					// Finished typing, pause then start deleting
+					setTimeout(() => {
+						projIsDeleting = true;
+						projTypeWriter();
+					}, 2000);
+				}
+			} else {
+				// Deleting
+				if (projCurrentCharIndex > 0) {
+					projTitle.textContent = currentText.substring(0, projCurrentCharIndex - 1);
+					projCurrentCharIndex--;
+					setTimeout(projTypeWriter, 50);
+				} else {
+					// Finished deleting, move to next text
+					projIsDeleting = false;
+					projCurrentTextIndex = (projCurrentTextIndex + 1) % projTexts.length;
+					setTimeout(projTypeWriter, 500);
+				}
+			}
+		}
+		
+		// Start projects typewriter after a delay
+		setTimeout(projTypeWriter, 1000);
+	}
+});
+
+// Generate a slide element
+function createSlideElement(slideIndex) {
+	const projectIndex = ((slideIndex % totalSlides) + totalSlides) % totalSlides;
+	const project = projectTemplates[projectIndex];
+	
+	const slide = document.createElement('div');
+	slide.className = 'carousel-slide';
+	slide.onclick = () => openProjectModal(project.modalIndex);
+	
+	slide.innerHTML = `
+		<div class="project-preview">
+			<img src="${project.img}" alt="${project.alt}" loading="lazy">
+			<div class="project-overlay">
+				<h3>${project.title}</h3>
+				<p>Click to view details</p>
+			</div>
+		</div>
+	`;
+	
+	return slide;
+}
+
+// Initialize infinite carousel with initial slides
+function initializeInfiniteCarousel() {
+	const track = document.getElementById('carouselTrack');
+	const buffer = 10; // Extra slides on each side
+	
+	// Set track to relative positioning for absolute children
+	track.style.position = 'relative';
+	track.style.height = '400px'; // Set a fixed height
+	
+	// Generate initial slides
+	for (let i = -buffer; i < visibleSlides + buffer; i++) {
+		const slide = createSlideElement(i);
+		slide.dataset.slideIndex = i;
+		slide.style.position = 'absolute';
+		slide.style.left = `${i * slideWidth}px`;
+		slide.style.width = `300px`;
+		track.appendChild(slide);
+	}
+}
+
+// Update carousel position and manage slides
+function updateInfiniteCarousel() {
+	const track = document.getElementById('carouselTrack');
+	const slides = track.querySelectorAll('.carousel-slide');
+	
+	// Check if we need to add/remove slides BEFORE updating position
+	const buffer = 10; // Increased buffer for smoother experience
+	const existingIndices = Array.from(slides).map(slide => parseInt(slide.dataset.slideIndex));
+	const minIndex = existingIndices.length > 0 ? Math.min(...existingIndices) : 0;
+	const maxIndex = existingIndices.length > 0 ? Math.max(...existingIndices) : 0;
+	
+	// Add slides to the left if needed
+	if (currentSlide - buffer < minIndex) {
+		for (let i = minIndex - 1; i >= currentSlide - buffer; i--) {
+			const slide = createSlideElement(i);
+			slide.dataset.slideIndex = i;
+			slide.style.position = 'absolute';
+			slide.style.left = `${i * slideWidth}px`;
+			slide.style.width = `300px`;
+			track.insertBefore(slide, track.firstChild);
+		}
+	}
+	
+	// Add slides to the right if needed
+	if (currentSlide + visibleSlides + buffer > maxIndex) {
+		for (let i = maxIndex + 1; i <= currentSlide + visibleSlides + buffer; i++) {
+			const slide = createSlideElement(i);
+			slide.dataset.slideIndex = i;
+			slide.style.position = 'absolute';
+			slide.style.left = `${i * slideWidth}px`;
+			slide.style.width = `300px`;
+			track.appendChild(slide);
+		}
+	}
+	
+	// Update position - use consistent calculation
+	track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+	
+	// Remove slides that are too far away to save memory
+	const slidesToRemove = Array.from(track.querySelectorAll('.carousel-slide')).filter(slide => {
+		const index = parseInt(slide.dataset.slideIndex);
+		return index < currentSlide - buffer * 3 || index > currentSlide + visibleSlides + buffer * 3;
+	});
+	
+	slidesToRemove.forEach(slide => slide.remove());
+	
+	// Update dots
+	updateDots();
+}
+
+function createCarouselDots() {
+	const dotsContainer = document.getElementById('carouselDots');
+	dotsContainer.innerHTML = '';
+	
+	for (let i = 0; i < totalSlides; i++) {
+		const dot = document.createElement('div');
+		dot.className = 'carousel-dot';
+		if (i === 0) dot.classList.add('active');
+		dot.onclick = () => goToSlide(i);
+		dotsContainer.appendChild(dot);
+	}
+}
+
+function updateDots() {
+	const dots = document.querySelectorAll('.carousel-dot');
+	const activeDotIndex = ((currentSlide % totalSlides) + totalSlides) % totalSlides;
+	dots.forEach((dot, index) => {
+		dot.classList.toggle('active', index === activeDotIndex);
+	});
+}
+
+function moveCarousel(direction) {
+	currentSlide += direction;
+	updateInfiniteCarousel();
+}
+
+function goToSlide(slideIndex) {
+	currentSlide = slideIndex;
+	updateInfiniteCarousel();
+}
+
+function openProjectModal(projectIndex) {
+	const project = projectsData[projectIndex];
+	const modal = document.getElementById('projectModal');
+	const modalBody = document.getElementById('projectModalBody');
+	
+	modalBody.innerHTML = `
+		<img src="${project.image}" alt="${project.title}" class="project-modal-image">
+		<div class="project-modal-info">
+			<h2>${project.title}</h2>
+			<p>${project.description}</p>
+			<div class="project-modal-tech">
+				${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+			</div>
+			<div class="project-modal-actions">
+				${project.actions.map(action => 
+					`<a href="${action.href}" class="btn btn-${action.type}" target="_blank" rel="noopener noreferrer">${action.text}</a>`
+				).join('')}
+			</div>
+		</div>
+	`;
+	
+	modal.style.display = 'block';
+	modal.classList.add('show');
+	document.body.style.overflow = 'hidden';
+}
+
+function closeProjectModal() {
+	const modal = document.getElementById('projectModal');
+	modal.classList.remove('show');
+	
+	document.body.style.overflow = 'auto';
+	
+	setTimeout(() => {
+		modal.style.display = 'none';
+	}, 300);
+}
+
+// Close project modal when clicking outside
+document.addEventListener('click', function(event) {
+	const modal = document.getElementById('projectModal');
+	if (event.target === modal) {
+		closeProjectModal();
+	}
+});
+
+// Swipe/Drag functionality for carousel
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+let initialTransform = 0;
+
+function initSwipeHandlers() {
+	const carouselTrack = document.getElementById('carouselTrack');
+	const carouselContainer = carouselTrack.parentElement;
+	
+	// Mouse events
+	carouselContainer.addEventListener('mousedown', startDrag);
+	carouselContainer.addEventListener('mousemove', drag);
+	carouselContainer.addEventListener('mouseup', endDrag);
+	carouselContainer.addEventListener('mouseleave', endDrag);
+	
+	// Touch events
+	carouselContainer.addEventListener('touchstart', startDrag, { passive: false });
+	carouselContainer.addEventListener('touchmove', drag, { passive: false });
+	carouselContainer.addEventListener('touchend', endDrag);
+	
+	// Prevent default drag behavior
+	carouselContainer.addEventListener('dragstart', (e) => e.preventDefault());
+}
+
+function startDrag(e) {
+	isDragging = true;
+	const carouselTrack = document.getElementById('carouselTrack');
+	
+	// Get initial position
+	if (e.type === 'touchstart') {
+		startX = e.touches[0].clientX;
+	} else {
+		startX = e.clientX;
+	}
+	
+	// Get current transform value
+	const transform = carouselTrack.style.transform;
+	initialTransform = transform ? parseFloat(transform.match(/-?\d+\.?\d*/)[0]) : 0;
+	
+	// Add dragging class for visual feedback
+	carouselTrack.style.cursor = 'grabbing';
+	carouselTrack.style.transition = 'none';
+}
+
+function drag(e) {
+	if (!isDragging) return;
+	
+	e.preventDefault();
+	
+	if (e.type === 'touchmove') {
+		currentX = e.touches[0].clientX;
+	} else {
+		currentX = e.clientX;
+	}
+	
+	const diffX = currentX - startX;
+	const carouselTrack = document.getElementById('carouselTrack');
+	
+	// Apply drag transform
+	carouselTrack.style.transform = `translateX(${initialTransform + diffX}px)`;
+}
+
+function endDrag(e) {
+	if (!isDragging) return;
+	
+	isDragging = false;
+	const carouselTrack = document.getElementById('carouselTrack');
+	
+	// Restore transition
+	carouselTrack.style.cursor = 'grab';
+	carouselTrack.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+	
+	// Calculate if we should move to next/previous slide
+	const diffX = currentX - startX;
+	const threshold = 50; // Minimum drag distance to trigger slide change
+	
+	if (Math.abs(diffX) > threshold) {
+		if (diffX > 0) {
+			// Dragged right - go to previous slide
+			moveCarousel(-1);
+		} else {
+			// Dragged left - go to next slide
+			moveCarousel(1);
+		}
+	} else {
+		// Snap back to current position
+		updateInfiniteCarousel();
+	}
+}
 
