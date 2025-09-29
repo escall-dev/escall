@@ -349,6 +349,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	updateInfiniteCarousel();
 	initSwipeHandlers();
 
+	// Add additional click handlers for better mobile support
+	setupMobileClickHandlers();
+
 	// Projects title typewriter (looping)
 	const projTitle = document.getElementById('projects-typewriter');
 	if (projTitle) {
@@ -401,6 +404,29 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
+// Additional mobile click handler setup
+function setupMobileClickHandlers() {
+	// Add touch-specific handling for better mobile experience
+	const carouselContainer = document.querySelector('.carousel-container');
+	if (carouselContainer) {
+		// Add a dedicated tap handler for mobile devices
+		carouselContainer.addEventListener('touchend', handleMobileTap, { passive: true });
+	}
+}
+
+function handleMobileTap(e) {
+	// Only handle if we didn't drag and it was a quick tap
+	if (!hasMoved && Date.now() - startTime < 300) {
+		const slide = e.target.closest('.carousel-slide');
+		if (slide && slide.dataset.modalIndex) {
+			// Add a small delay to ensure smooth interaction
+			setTimeout(() => {
+				openProjectModal(parseInt(slide.dataset.modalIndex));
+			}, 50);
+		}
+	}
+}
+
 // Generate a slide element
 function createSlideElement(slideIndex) {
 	const projectIndex = ((slideIndex % totalSlides) + totalSlides) % totalSlides;
@@ -408,14 +434,15 @@ function createSlideElement(slideIndex) {
 	
 	const slide = document.createElement('div');
 	slide.className = 'carousel-slide';
-	slide.onclick = () => openProjectModal(project.modalIndex);
+	// Remove direct onclick - using event delegation instead
+	slide.dataset.modalIndex = project.modalIndex;
 	
 	slide.innerHTML = `
 		<div class="project-preview">
 			<img src="${project.img}" alt="${project.alt}" loading="lazy">
 			<div class="project-overlay">
 				<h3>${project.title}</h3>
-				<p>Click to view details</p>
+				<p>Tap to view details</p>
 			</div>
 		</div>
 	`;
@@ -430,7 +457,8 @@ function initializeInfiniteCarousel() {
 	
 	// Set track to relative positioning for absolute children
 	track.style.position = 'relative';
-	track.style.height = '400px'; // Set a fixed height
+	track.style.height = 'auto'; // Let height be determined by content
+	track.style.minHeight = '200px'; // Minimum height for mobile
 	
 	// Generate initial slides
 	for (let i = -buffer; i < visibleSlides + buffer; i++) {
@@ -569,15 +597,22 @@ document.addEventListener('click', function(event) {
 	}
 });
 
-// Swipe/Drag functionality for carousel
+// Enhanced Swipe/Drag functionality with proper tap detection
 let isDragging = false;
 let startX = 0;
+let startY = 0;
 let currentX = 0;
+let currentY = 0;
 let initialTransform = 0;
+let startTime = 0;
+let hasMoved = false;
 
 function initSwipeHandlers() {
 	const carouselTrack = document.getElementById('carouselTrack');
 	const carouselContainer = carouselTrack.parentElement;
+	
+	// Add event delegation for slide clicks
+	carouselContainer.addEventListener('click', handleSlideClick);
 	
 	// Mouse events
 	carouselContainer.addEventListener('mousedown', startDrag);
@@ -585,47 +620,100 @@ function initSwipeHandlers() {
 	carouselContainer.addEventListener('mouseup', endDrag);
 	carouselContainer.addEventListener('mouseleave', endDrag);
 	
-	// Touch events
+	// Touch events with passive:false for preventDefault
 	carouselContainer.addEventListener('touchstart', startDrag, { passive: false });
 	carouselContainer.addEventListener('touchmove', drag, { passive: false });
 	carouselContainer.addEventListener('touchend', endDrag);
 	
-	// Prevent default drag behavior
-	carouselContainer.addEventListener('dragstart', (e) => e.preventDefault());
+	// Prevent default drag behavior on images
+	carouselContainer.addEventListener('dragstart', (e) => {
+		if (e.target.tagName === 'IMG') {
+			e.preventDefault();
+		}
+	});
+}
+
+function handleSlideClick(e) {
+	// Only handle clicks if we haven't dragged
+	if (hasMoved || isDragging) {
+		return;
+	}
+	
+	// Find the closest carousel slide
+	const slide = e.target.closest('.carousel-slide');
+	if (slide && slide.dataset.modalIndex) {
+		e.preventDefault();
+		e.stopPropagation();
+		openProjectModal(parseInt(slide.dataset.modalIndex));
+	}
 }
 
 function startDrag(e) {
-	isDragging = true;
+	// Reset movement tracking
+	hasMoved = false;
+	startTime = Date.now();
+	
 	const carouselTrack = document.getElementById('carouselTrack');
 	
 	// Get initial position
 	if (e.type === 'touchstart') {
 		startX = e.touches[0].clientX;
+		startY = e.touches[0].clientY;
 	} else {
 		startX = e.clientX;
+		startY = e.clientY;
 	}
 	
 	// Get current transform value
 	const transform = carouselTrack.style.transform;
 	initialTransform = transform ? parseFloat(transform.match(/-?\d+\.?\d*/)[0]) : 0;
-	
-	// Add dragging class for visual feedback
-	carouselTrack.style.cursor = 'grabbing';
-	carouselTrack.style.transition = 'none';
 }
 
 function drag(e) {
-	if (!isDragging) return;
-	
-	e.preventDefault();
-	
+	// Get current position
 	if (e.type === 'touchmove') {
 		currentX = e.touches[0].clientX;
+		currentY = e.touches[0].clientY;
 	} else {
 		currentX = e.clientX;
+		currentY = e.clientY;
 	}
 	
 	const diffX = currentX - startX;
+	const diffY = currentY - startY;
+	const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+	
+	// Only start dragging if we've moved more than 10px
+	if (!isDragging && distance > 10) {
+		// Check if this is more horizontal than vertical movement
+		if (Math.abs(diffX) > Math.abs(diffY)) {
+			isDragging = true;
+			hasMoved = true;
+			
+			const carouselTrack = document.getElementById('carouselTrack');
+			carouselTrack.style.cursor = 'grabbing';
+			carouselTrack.style.transition = 'none';
+			
+			// Prevent scrolling on touch devices
+			if (e.type === 'touchmove') {
+				e.preventDefault();
+			}
+		} else {
+			// This is vertical scrolling, don't interfere
+			return;
+		}
+	}
+	
+	if (!isDragging) return;
+	
+	// Mark as moved for click prevention
+	hasMoved = true;
+	
+	// Prevent default to stop scrolling
+	if (e.type === 'touchmove') {
+		e.preventDefault();
+	}
+	
 	const carouselTrack = document.getElementById('carouselTrack');
 	
 	// Apply drag transform
@@ -633,20 +721,29 @@ function drag(e) {
 }
 
 function endDrag(e) {
-	if (!isDragging) return;
+	if (!isDragging) {
+		// Reset hasMoved after a short delay to allow click events
+		setTimeout(() => {
+			hasMoved = false;
+		}, 100);
+		return;
+	}
 	
 	isDragging = false;
 	const carouselTrack = document.getElementById('carouselTrack');
 	
-	// Restore transition
+	// Restore transition and cursor
 	carouselTrack.style.cursor = 'grab';
 	carouselTrack.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 	
 	// Calculate if we should move to next/previous slide
 	const diffX = currentX - startX;
-	const threshold = 50; // Minimum drag distance to trigger slide change
+	const dragTime = Date.now() - startTime;
+	const threshold = 80; // Minimum drag distance to trigger slide change
+	const velocity = Math.abs(diffX) / dragTime; // pixels per ms
 	
-	if (Math.abs(diffX) > threshold) {
+	// Move slide if dragged far enough or fast enough
+	if (Math.abs(diffX) > threshold || velocity > 0.5) {
 		if (diffX > 0) {
 			// Dragged right - go to previous slide
 			moveCarousel(-1);
@@ -658,5 +755,10 @@ function endDrag(e) {
 		// Snap back to current position
 		updateInfiniteCarousel();
 	}
+	
+	// Reset hasMoved after animation completes
+	setTimeout(() => {
+		hasMoved = false;
+	}, 500);
 }
 
