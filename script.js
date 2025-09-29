@@ -244,8 +244,32 @@ document.addEventListener('keydown', function(event) {
 // Projects Carousel Functionality - True Infinite Loop
 let currentSlide = 0;
 const totalSlides = 5;
-const slideWidth = 340; // 300px slide + 40px gap
-let visibleSlides = 3; // Number of slides visible at once
+let slideWidth = getSlideWidth(); // Responsive slide width
+
+// Calculate slide width based on screen size
+function getSlideWidth() {
+	if (window.innerWidth < 768) {
+		// Mobile: Calculate slide + gap spacing
+		const padding = 32; // 2 * var(--spacing-sm) = 2 * 16px
+		const gap = 32; // var(--spacing-lg) = 2rem = 32px
+		const slideActualWidth = Math.min(320, window.innerWidth - padding);
+		return slideActualWidth + gap; // slide width + gap for positioning
+	} else {
+		return 340; // Desktop: 300px slide + 40px gap
+	}
+}
+let visibleSlides = getVisibleSlides(); // Number of slides visible at once
+
+// Calculate visible slides based on screen size
+function getVisibleSlides() {
+	if (window.innerWidth < 768) {
+		return 1; // Mobile: show 1 card
+	} else if (window.innerWidth < 1200) {
+		return 2; // Tablet: show 2 cards
+	} else {
+		return 3; // Desktop: show 3 cards
+	}
+}
 
 // Project templates for infinite generation
 const projectTemplates = [
@@ -351,6 +375,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// Add additional click handlers for better mobile support
 	setupMobileClickHandlers();
+	
+	// Handle window resize to update visible slides
+	window.addEventListener('resize', handleResize);
 
 	// Projects title typewriter (looping)
 	const projTitle = document.getElementById('projects-typewriter');
@@ -403,6 +430,23 @@ document.addEventListener('DOMContentLoaded', function() {
 		setTimeout(projTypeWriter, 1000);
 	}
 });
+
+// Handle window resize for responsive carousel
+function handleResize() {
+	const newVisibleSlides = getVisibleSlides();
+	const newSlideWidth = getSlideWidth();
+	if (newVisibleSlides !== visibleSlides || newSlideWidth !== slideWidth) {
+		visibleSlides = newVisibleSlides;
+		slideWidth = newSlideWidth;
+		// Reset to first slide to avoid positioning issues
+		currentSlide = 0;
+		// Re-initialize the carousel with new settings
+		const track = document.getElementById('carouselTrack');
+		track.innerHTML = '';
+		initializeInfiniteCarousel();
+		updateInfiniteCarousel();
+	}
+}
 
 // Additional mobile click handler setup
 function setupMobileClickHandlers() {
@@ -466,7 +510,8 @@ function initializeInfiniteCarousel() {
 		slide.dataset.slideIndex = i;
 		slide.style.position = 'absolute';
 		slide.style.left = `${i * slideWidth}px`;
-		slide.style.width = `300px`;
+		const actualSlideWidth = window.innerWidth < 768 ? Math.min(320, window.innerWidth - 32) : 300;
+		slide.style.width = `${actualSlideWidth}px`;
 		track.appendChild(slide);
 	}
 }
@@ -489,7 +534,8 @@ function updateInfiniteCarousel() {
 			slide.dataset.slideIndex = i;
 			slide.style.position = 'absolute';
 			slide.style.left = `${i * slideWidth}px`;
-			slide.style.width = `300px`;
+			const actualSlideWidth = window.innerWidth < 768 ? Math.min(320, window.innerWidth - 32) : 300;
+		slide.style.width = `${actualSlideWidth}px`;
 			track.insertBefore(slide, track.firstChild);
 		}
 	}
@@ -501,13 +547,35 @@ function updateInfiniteCarousel() {
 			slide.dataset.slideIndex = i;
 			slide.style.position = 'absolute';
 			slide.style.left = `${i * slideWidth}px`;
-			slide.style.width = `300px`;
+			const actualSlideWidth = window.innerWidth < 768 ? Math.min(320, window.innerWidth - 32) : 300;
+		slide.style.width = `${actualSlideWidth}px`;
 			track.appendChild(slide);
 		}
 	}
 	
-	// Update position - use consistent calculation
-	track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+	// Update position - use consistent calculation with centering for mobile
+	let translateX = -currentSlide * slideWidth;
+	
+	// Center the slides on mobile (single slide view)
+	if (visibleSlides === 1) {
+		const container = track.parentElement;
+		const containerWidth = container.offsetWidth;
+		let slideActualWidth;
+		
+		if (window.innerWidth < 768) {
+			// Mobile: use actual slide width (without gap)
+			const padding = 32;
+			slideActualWidth = Math.min(320, window.innerWidth - padding);
+		} else {
+			slideActualWidth = 300;
+		}
+		
+		// Calculate perfect center position
+		const centerOffset = (containerWidth - slideActualWidth) / 2;
+		translateX += centerOffset;
+	}
+	
+	track.style.transform = `translateX(${translateX}px)`;
 	
 	// Remove slides that are too far away to save memory
 	const slidesToRemove = Array.from(track.querySelectorAll('.carousel-slide')).filter(slide => {
@@ -614,9 +682,8 @@ function initSwipeHandlers() {
 	// Add event delegation for slide clicks
 	carouselContainer.addEventListener('click', handleSlideClick);
 	
-	// Mouse events
+	// Mouse events - only add mousemove when actually dragging
 	carouselContainer.addEventListener('mousedown', startDrag);
-	carouselContainer.addEventListener('mousemove', drag);
 	carouselContainer.addEventListener('mouseup', endDrag);
 	carouselContainer.addEventListener('mouseleave', endDrag);
 	
@@ -654,6 +721,7 @@ function startDrag(e) {
 	startTime = Date.now();
 	
 	const carouselTrack = document.getElementById('carouselTrack');
+	const carouselContainer = carouselTrack.parentElement;
 	
 	// Get initial position
 	if (e.type === 'touchstart') {
@@ -662,6 +730,8 @@ function startDrag(e) {
 	} else {
 		startX = e.clientX;
 		startY = e.clientY;
+		// Add mousemove listener only when mouse is pressed
+		carouselContainer.addEventListener('mousemove', drag);
 	}
 	
 	// Get current transform value
@@ -683,8 +753,8 @@ function drag(e) {
 	const diffY = currentY - startY;
 	const distance = Math.sqrt(diffX * diffX + diffY * diffY);
 	
-	// Only start dragging if we've moved more than 10px
-	if (!isDragging && distance > 10) {
+	// Only start dragging if we've moved more than 5px (reduced for smoother start)
+	if (!isDragging && distance > 5) {
 		// Check if this is more horizontal than vertical movement
 		if (Math.abs(diffX) > Math.abs(diffY)) {
 			isDragging = true;
@@ -692,7 +762,7 @@ function drag(e) {
 			
 			const carouselTrack = document.getElementById('carouselTrack');
 			carouselTrack.style.cursor = 'grabbing';
-			carouselTrack.style.transition = 'none';
+			carouselTrack.style.transition = 'none'; // Remove transition for smooth dragging
 			
 			// Prevent scrolling on touch devices
 			if (e.type === 'touchmove') {
@@ -716,11 +786,25 @@ function drag(e) {
 	
 	const carouselTrack = document.getElementById('carouselTrack');
 	
-	// Apply drag transform
-	carouselTrack.style.transform = `translateX(${initialTransform + diffX}px)`;
+	// Apply smooth drag transform
+	const dragTransform = initialTransform + diffX;
+	
+	// Use requestAnimationFrame for ultra-smooth dragging
+	if (!window.dragAnimationFrame) {
+		window.dragAnimationFrame = requestAnimationFrame(() => {
+			carouselTrack.style.transform = `translateX(${dragTransform}px)`;
+			window.dragAnimationFrame = null;
+		});
+	}
 }
 
 function endDrag(e) {
+	const carouselTrack = document.getElementById('carouselTrack');
+	const carouselContainer = carouselTrack.parentElement;
+	
+	// Always remove mousemove listener when ending drag
+	carouselContainer.removeEventListener('mousemove', drag);
+	
 	if (!isDragging) {
 		// Reset hasMoved after a short delay to allow click events
 		setTimeout(() => {
@@ -730,29 +814,21 @@ function endDrag(e) {
 	}
 	
 	isDragging = false;
-	const carouselTrack = document.getElementById('carouselTrack');
 	
-	// Restore transition and cursor
+	// Restore cursor and transition
 	carouselTrack.style.cursor = 'grab';
 	carouselTrack.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 	
-	// Calculate if we should move to next/previous slide
+	// Always move to the nearest slide based on drag position
 	const diffX = currentX - startX;
-	const dragTime = Date.now() - startTime;
-	const threshold = 80; // Minimum drag distance to trigger slide change
-	const velocity = Math.abs(diffX) / dragTime; // pixels per ms
+	const slideChange = Math.round(diffX / slideWidth);
 	
-	// Move slide if dragged far enough or fast enough
-	if (Math.abs(diffX) > threshold || velocity > 0.5) {
-		if (diffX > 0) {
-			// Dragged right - go to previous slide
-			moveCarousel(-1);
-		} else {
-			// Dragged left - go to next slide
-			moveCarousel(1);
-		}
+	if (slideChange !== 0) {
+		// Move to the nearest slide based on drag distance
+		currentSlide -= slideChange;
+		updateInfiniteCarousel();
 	} else {
-		// Snap back to current position
+		// If very small drag, just update position smoothly
 		updateInfiniteCarousel();
 	}
 	
@@ -761,4 +837,5 @@ function endDrag(e) {
 		hasMoved = false;
 	}, 500);
 }
+
 
